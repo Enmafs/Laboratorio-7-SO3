@@ -152,4 +152,5 @@ Ir a "Nombre del equipo" > "Cambiar":
 
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
-Contraseña: 2025140
+
+Contraseña: 20251402
