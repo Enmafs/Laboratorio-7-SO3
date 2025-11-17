@@ -1,0 +1,155 @@
+Práctica 1
+sudo dnf install -y nfs-utils
+sudo sudsystemctl enable --now nfs-server
+sudo mkdir -p /srv/OS3
+sudo touch /srv/OS3/Adrian{1..100}.txt
+sudo chown -R nobody:nobody /srv/OS3
+sudo chmod -R 777 /srv/OS3
+sudo tee /etc/exports
+/srv/OS3 *(rw,sync,no_subtree_check)
+sudo firewall-cmd --zone=public --add-service=nfs --permanente
+sudo firewall-cmd --reload
+sudo systemctl restart nfs-utils
+sudo systemctl restart nfs-server
+sudo systemctl start rpcbind      #En la maquina cliente se debe hacer
+sudo systemctl enable rpcbind     #En la maquina cliente se debe hacer
+sudo exportfs -v
+
+Client Machine
+sudo dnf install -y nfs-utils
+sudo mkdir -p /mnt/OS3
+sudo mount -t nfs 10.0.0.174:/srv/OS3 /mnt/OS3
+ls /mnt/OS3
+sudo vi /etc/fstab
+10.0.0.174:/srv/OS3 /mnt/OS3 nfs defaults 0 0
+sudo mount -a
+
+Práctica 2
+sudo mkdir -p /srv/sambashare
+sudo dnf install samba -y
+sudo useradd enma
+sudo groupadd enma
+sudo passwd enma
+sudo usermod -aG samba enma
+sudo smbpasswd -a enma
+suod chown -R enma:samba /srv/sambashare/*
+sudo chmod -R enma:samba 777 /srv/sambashare/*
+sudo nano /etc/samba/smb.conf
+[global]
+workgroup = WORKGROUP
+security = user
+
+[RecursoCompartido]
+comment = Archivos para Windows
+path = /srv/sambashare
+browseable = yes
+writable = yes
+guest ok = no
+vlaid users = enma
+create mask = 0755
+directory mask = 0755
+cd /srv/sambashare
+sudo touch adrian{1..100}.txt
+ls
+sudo systemctl enable nmb smb
+sudo systemctl start nmb smb
+sudo firewall-cmd --permanent --add-service=samba
+sudo firewall-cmd --reload
+sudo systemctl restart smb nmb
+
+CMD EN WINDOWS
+net use * /delete /yes
+net use
+
+#En el server linux#
+cat /srv/sambashare/adrian99.txt
+el zuzm de la carabela           #ESTA ES LA SALIDA
+
+Práctica 3
+1.	Preparación del sistema
+---------------------------------------------------------
+hostnamectl set-hostname samba.inet
+ sudo su
+echo "10.0.0.92 OS3.inet" >> /etc/hosts 
+dnf -y update
+dnf install -y oracle-epel-release-el10
+sudo dnf config-manager --set-enabled ol9_codeready_builder 
+dnf update 
+sudo dnf makecache 
+dnf -y install wget tar gcc make python3-devel 
+
+---------------------------------------------------------
+2. Descarga e instalación de samba
+mkdir -p /samba && cd /samba 
+wget https://download.samba.org/pub/samba/stable/samba-4.16.2.tar.gz 
+tar -zxvf samba-4.16.2.tar.gz && cd samba-4.16.2/ 
+
+sudo dnf -y install \ 
+docbook-style-xsl python3-markdown bison dbus-devel flex gdb \ 
+gnutls-devel jansson-devel keyutils-libs-devel krb5-workstation \ 
+libacl-devel libaio-devel libarchive-devel libattr-devel libblkid-devel \ 
+libtasn1 libtasn1-tools libxml2-devel libxslt lmdb-devel openldap-devel \ 
+pam-devel perl perl-ExtUtils-MakeMaker perl-Parse-Yapp popt-devel \ 
+python3-cryptography python3-dns python3-gpg readline-devel rpcgen \ 
+systemd-devel zlib-devel perl-JSON gpgme-devel screen 
+
+./configure --prefix=/usr/local/samba --enable-fhs --with-ads --with-systemd 
+make -j$(nproc)
+make install 
+export PATH=/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+
+nano ~/.bash_profile PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+export PATH 
+nano ../.bash_profile PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+export PATH 
+
+ERROR DE PROVISION
+echo "/usr/local/samba/lib/samba" | sudo tee /etc/ld.so.conf.d/samba.conf 
+echo "/usr/local/samba/lib64" | sudo tee -a /etc/ld.so.conf.d/samba.conf 
+echo "/usr/local/samba/lib" | sudo tee -a /etc/ld.so.conf.d/samba.conf
+
+sudo ldconfig 
+
+samba-tool domain provision --use-rfc2307 --interactive --option="interfaces= lo ens160" --option="bind interfaces only=yes" 
+
+#Dominio: OS3.inet 
+#Nombre de dominio: OS3 
+#Nombre de controlador: dc 
+#Backend DNS: SAMBA_INTERNAL 
+#Contraseña: Teletubies123 
+# inicia el servicio de samba con el siguiente comando 
+samba 
+
+#Pruebas de DS 
+ping google.com 
+ping OS3.inet 
+
+#Copiar el Archivo de Kerberos 
+cp /usr/local/samba/var/lib/samba/private/krb5.conf /etc/krb5.conf 
+#Agregar reglas al firewall 
+firewall-cmd --permanent --add-service={ldap,ldaps,kerberos,dns} 
+firewall-cmd --permanent --add-port={53,88,135,139,389,445,464,636,3268,3269}/tcp 
+firewall-cmd --permanent --add-port={53,88,123,138,389,464}/udp 
+firewall-cmd --reload 
+samba-tool domain passwordsettings set --complexity=off
+samba-tool user create lanegracubana 20251402
+samba-tool group addmembers "Domain Admins" lanegracubana
+samba-tool group listmembers "Domain Admins"
+samba-tool domain info 10.0.0.92
+samba-tool user list
+samba-tool computer list
+
+# Agregar Registro DN maquina cliente #########IP DEl SERVER ######### IP VM WINDOWS ################ 
+                                                          samba-tool dns add 10.0.0.92 OS3.inet www A 10.0.0.90 -U lanegracubana 
+
+#### en la VM de windows###: 
+
+## En la configuracion de al tarjeta de Red cambiar el DNS de la maquina a que apunte al servidor de linux 
+#haga ping al dominio (OS3.inet) el ping debe de responder con al Ip der servidor 
+
+Presiona Win + R, escribe sysdm.cpl y presiona Enter. 
+Ir a "Nombre del equipo" > "Cambiar": 
+
+Selecciona Miembro de un dominio e ingresa: os3.inet 
+Usuario: lanegracubana 
+Contraseña: 2025140
