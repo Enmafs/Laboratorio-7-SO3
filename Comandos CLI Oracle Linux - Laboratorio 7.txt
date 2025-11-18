@@ -139,11 +139,10 @@ samba-tool user list
 samba-tool computer list
 
 # Agregar Registro DN maquina cliente #########IP DEl SERVER ######### IP VM WINDOWS ################ 
-                                                          samba-tool dns add 10.0.0.92 OS3.inet www A 10.0.0.90 -U lanegracubana 
+                              samba-tool dns add 10.0.0.92 OS3.inet www A 10.0.0.90 -U lanegracubana 
 
 #### en la VM de windows###: 
-
-## En la configuracion de al tarjeta de Red cambiar el DNS de la maquina a que apunte al servidor de linux 
+##En la configuracion de al tarjeta de Red cambiar el DNS de la maquina a que apunte al servidor de linux 
 #haga ping al dominio (OS3.inet) el ping debe de responder con al Ip der servidor 
 
 Presiona Win + R, escribe sysdm.cpl y presiona Enter. 
@@ -152,5 +151,6 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
 
