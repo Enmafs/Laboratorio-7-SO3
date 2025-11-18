@@ -84,8 +84,7 @@ mkdir -p /samba && cd /samba
 wget https://download.samba.org/pub/samba/stable/samba-4.16.2.tar.gz 
 tar -zxvf samba-4.16.2.tar.gz && cd samba-4.16.2/ 
 
-sudo dnf -y install \ 
-docbook-style-xsl python3-markdown bison dbus-devel flex gdb \ 
+sudo dnf -y install docbook-style-xsl python3-markdown bison dbus-devel flex gdb \ 
 gnutls-devel jansson-devel keyutils-libs-devel krb5-workstation \ 
 libacl-devel libaio-devel libarchive-devel libattr-devel libblkid-devel \ 
 libtasn1 libtasn1-tools libxml2-devel libxslt lmdb-devel openldap-devel \ 
@@ -153,4 +152,5 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
