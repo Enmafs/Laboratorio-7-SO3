@@ -100,7 +100,7 @@ export PATH=/usr/local/samba/bin:/usr/local/samba/sbin:$PATH
 nano ~/.bash_profile                                                                                      
 PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 export PATH                                                                                    
-nano ../.bash_profile                                                                 PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+nano ../.bash_profile                                                                                            PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 export PATH 
 
 ERROR DE PROVISION
@@ -112,7 +112,7 @@ sudo ldconfig
 
 samba-tool domain provision --use-rfc2307 --interactive --option="interfaces= lo ens160" --option="bind interfaces only=yes" 
 
-#Dominio: OS3.inet 
+#Dominio: OS3.inet Add NFS and Samba setup instructions
 #Nombre de dominio: OS3 
 #Nombre de controlador: dc 
 #Backend DNS: SAMBA_INTERNAL 
@@ -152,6 +152,7 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
 
 
