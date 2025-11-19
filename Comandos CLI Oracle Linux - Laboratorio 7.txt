@@ -97,36 +97,36 @@ make -j$(nproc)
 make install 
 export PATH=/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 
-nano ~/.bash_profile                                                                                      
+nano ~/.bash_profile                                                        
 PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 export PATH                                                                                    
-nano ../.bash_profile                                                                                            PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
-export PATH 
-
-ERROR DE PROVISION
-echo "/usr/local/samba/lib/samba" | sudo tee /etc/ld.so.conf.d/samba.conf 
-echo "/usr/local/samba/lib64" | sudo tee -a /etc/ld.so.conf.d/samba.conf 
-echo "/usr/local/samba/lib" | sudo tee -a /etc/ld.so.conf.d/samba.conf
-
+nano ../.bash_profile                                                                                            PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH                                      
+export PATH                                                                                                
+                                                                                                           
+ERROR DE PROVISION                                                                                    
+echo "/usr/local/samba/lib/samba" | sudo tee /etc/ld.so.conf.d/samba.conf                           
+echo "/usr/local/samba/lib64" | sudo tee -a /etc/ld.so.conf.d/samba.conf                            
+echo "/usr/local/samba/lib" | sudo tee -a /etc/ld.so.conf.d/samba.conf                             
+                                                                                                 
 sudo ldconfig 
-
+                                                                                               
 samba-tool domain provision --use-rfc2307 --interactive --option="interfaces= lo ens160" --option="bind interfaces only=yes" 
-
-#Dominio: OS3.inet Add NFS and Samba setup instructions
-#Nombre de dominio: OS3 
-#Nombre de controlador: dc 
-#Backend DNS: SAMBA_INTERNAL 
-#Contraseña: Teletubies123 
-# inicia el servicio de samba con el siguiente comando 
-samba 
-
-#Pruebas de DS 
-ping google.com 
-ping OS3.inet 
-
-#Copiar el Archivo de Kerberos 
-cp /usr/local/samba/var/lib/samba/private/krb5.conf /etc/krb5.conf 
-#Agregar reglas al firewall 
+                                                                                                     
+#Dominio: OS3.inet Add NFS and Samba setup instructions                                            
+#Nombre de dominio: OS3                                                                            
+#Nombre de controlador: dc                                                                         
+#Backend DNS: SAMBA_INTERNAL                                                                     
+#Contraseña: Teletubies123                                                                         
+# inicia el servicio de samba con el siguiente comando                                           
+samba                                                                                                    
+                                                                                                           
+#Pruebas de DS                                                                                        
+ping google.com                                                                                        
+ping OS3.inet                                                                                          
+                                                                                                   
+#Copiar el Archivo de Kerberos                                                                
+cp /usr/local/samba/var/lib/samba/private/krb5.conf /etc/krb5.conf                                     
+#Agregar reglas al firewall                                                     
 firewall-cmd --permanent --add-service={ldap,ldaps,kerberos,dns} 
 firewall-cmd --permanent --add-port={53,88,135,139,389,445,464,636,3268,3269}/tcp 
 firewall-cmd --permanent --add-port={53,88,123,138,389,464}/udp 
@@ -152,6 +152,7 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
 
 
