@@ -97,9 +97,10 @@ make -j$(nproc)
 make install 
 export PATH=/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 
-nano ~/.bash_profile PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
-export PATH 
-nano ../.bash_profile PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+nano ~/.bash_profile                                                                                      
+PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
+export PATH                                                                                    
+nano ../.bash_profile                                                                 PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH 
 export PATH 
 
 ERROR DE PROVISION
@@ -151,6 +152,7 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
 
 
