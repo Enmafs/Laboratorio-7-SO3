@@ -32,8 +32,8 @@ sudo groupadd enma
 sudo passwd enma
 sudo usermod -aG samba enma
 sudo smbpasswd -a enma
-suod chown -R enma:samba /srv/sambashare/*
-sudo chmod -R enma:samba 777 /srv/sambashare/*
+sudo chown -R enma:samba /srv/sambashare/
+sudo chmod -R enma:samba 777 /srv/sambashare/
 sudo nano /etc/samba/smb.conf
 [global]
 workgroup = WORKGROUP
@@ -153,6 +153,7 @@ Ir a "Nombre del equipo" > "Cambiar":
 Selecciona Miembro de un dominio e ingresa: os3.inet 
 Usuario: lanegracubana 
 Contraseña: 20251402
+
 
 
 
