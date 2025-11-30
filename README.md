@@ -24,4 +24,4 @@ Practica 3: Creacion de controlador de Dominio con cliente Windows
 • Agregar la VM de Windows al dominio con SAMBA y que autentique con el usuario creado en el punto anterior.                                                                               
                                                                                                                                                                                            
 Este es el enlace a la lista de reproduccion en youtube: ↓                                                                                                                                
-https://www.youtube.com/playlist?list=PLn9wGcsdOtldXmBq5git9GLOaJf73w_ie
+https://www.youtube.com/playlist?list=PLn9wGcsdOtlerPJX8l0h4t9dRALFp4NeS
