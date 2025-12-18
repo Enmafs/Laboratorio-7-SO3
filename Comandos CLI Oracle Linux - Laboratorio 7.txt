@@ -69,8 +69,10 @@ Práctica 3
 1.	Preparación del sistema
 ---------------------------------------------------------
 hostnamectl set-hostname samba.inet
+hostname
+hostname -f
  sudo su
-echo "10.0.0.92 OS3.inet" >> /etc/hosts 
+echo "10.0.0.92 dc1.OS3.inet OS3.inet dc1" >> /etc/hosts 
 dnf -y update
 dnf install -y oracle-epel-release-el10
 sudo dnf config-manager --set-enabled ol9_codeready_builder 
@@ -121,17 +123,25 @@ samba-tool domain provision --use-rfc2307 --interactive --option="interfaces= lo
 # inicia el servicio de samba con el siguiente comando                                           
 samba                                                                                                    
                                                                                                            
-#Pruebas de DS                                                                                        
-ping google.com                                                                                        
-ping OS3.inet                                                                                          
-                                                                                                   
+#Pruebas de DNS                                                                                        
+ping -c 3 google.com                                                                                        
+ping -c 3 OS3.inet                                                                            
+                                                                                              
+ping -c 3 dc1.OS3.inet                                                                        
+                                                                                                                                                                                            
 #Copiar el Archivo de Kerberos                                                                
 cp /usr/local/samba/var/lib/samba/private/krb5.conf /etc/krb5.conf                                     
 #Agregar reglas al firewall                                                     
 firewall-cmd --permanent --add-service={ldap,ldaps,kerberos,dns} 
 firewall-cmd --permanent --add-port={53,88,135,139,389,445,464,636,3268,3269}/tcp 
-firewall-cmd --permanent --add-port={53,88,123,138,389,464}/udp 
-firewall-cmd --reload 
+firewall-cmd --permanent --add-port={53,88,123,138,389,464}/udp
+firewall-cmd --permanent --add-port=49152-65535/tcp                                           
+firewall-cmd --reload
+                                                                                              
+sudo nmcli con mod ens160 ipv4.dns 10.0.0.92                                                  
+sudo nmcli con mod ens160 ipv4.ignore-auto-dns yes                                           
+sudo nmcli con up ens160                                                                     
+                                                                                              
 samba-tool domain passwordsettings set --complexity=off
 samba-tool user create lanegracubana 20251402
 samba-tool group addmembers "Domain Admins" lanegracubana
@@ -139,7 +149,9 @@ samba-tool group listmembers "Domain Admins"
 samba-tool domain info 10.0.0.92
 samba-tool user list
 samba-tool computer list
-
+                                                                                              
+sudo setenforce 0                                                                             
+                                                                                              
 # Agregar Registro DN maquina cliente #########IP DEl SERVER ######### IP VM WINDOWS ################ 
                               samba-tool dns add 10.0.0.92 OS3.inet www A 10.0.0.90 -U lanegracubana 
 
@@ -201,11 +213,6 @@ NOTA: Si te aparece contenido en el primer nano (~/.bash_profile) solo reemplaza
 nano ~/.bash_profile 
         PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH
         export PATH  
-
-
-nano ../.bash_profile
-        PATH=$PATH:$HOME/bin:/usr/local/samba/bin:/usr/local/samba/sbin:$PATH
-        export PATH
 
 NOTA: Asegurate que en --option="interfaces= lo ens160" tenga el verdadero nombre de tu interfaz de red, o sea que en vez de ens160 tenga el nombre de la interfaz que usas (si no sabes, pon ip a en la terminal y el nombre que vas a usar será la interfaz que tenga la ip de tu maquina).
 samba-tool domain provision --use-rfc2307 --interactive --option="interfaces= lo ens160" --option="bind interfaces only=yes"
@@ -288,6 +295,7 @@ sudo setenforce 0
 
 # Para verificar el estado (debería decir "Permissive")
 sestatus
+
 
 
 
